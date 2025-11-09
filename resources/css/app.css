@@ -1,3 +1,106 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes todin-pulse {
+    0% {
+        transform: translateY(0) scale(1);
+        letter-spacing: 0.08em;
+        color: #b1fe52;
+        opacity: 0.9;
+        text-shadow: 0 12px 25px rgba(52, 252, 62, 0.418);
+    }
+
+    25% {
+        transform: translateY(-6px) scale(1.08);
+        letter-spacing: 0.12em;
+        color: #ec4899;
+        opacity: 1;
+        text-shadow: 0 18px 35px rgba(236, 72, 153, 0.45);
+    }
+
+    50% {
+        transform: translateY(3px) scale(0.97);
+        letter-spacing: 0.06em;
+        color: #0ea5e9;
+        opacity: 0.85;
+        text-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+    }
+
+    75% {
+        transform: translateY(-4px) scale(1.04);
+        letter-spacing: 0.11em;
+        color: #a855f7;
+        opacity: 0.95;
+        text-shadow: 0 14px 32px rgba(168, 85, 247, 0.4);
+    }
+
+    100% {
+        transform: translateY(0) scale(1);
+        letter-spacing: 0.08em;
+        color: #b1fe52;
+        opacity: 0.9;
+        text-shadow: 0 12px 25px rgba(52, 252, 62, 0.418);
+    }
+}
+
+@keyframes todin-shadow {
+    0% {
+        transform: translateY(0) scaleX(0.8);
+        opacity: 0.35;
+    }
+
+    50% {
+        transform: translateY(4px) scaleX(1.25);
+        opacity: 0.55;
+    }
+
+    100% {
+        transform: translateY(0) scaleX(0.8);
+        opacity: 0.35;
+    }
+}
+
+@layer utilities {
+    .bg-dots-darker {
+        background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(0,0,0,0.07)'/%3E%3C/svg%3E");
+    }
+
+    .dark .dark\:bg-dots-lighter {
+        background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E");
+    }
+
+    .todin-hero {
+        position: relative;
+        display: inline-block;
+        transform-origin: center;
+        transition: transform 200ms ease;
+    }
+
+    .todin-hero:hover {
+        transform: scale(1.05);
+    }
+
+    .todin-hero__text {
+        position: relative;
+        display: inline-block;
+        animation: todin-pulse 7s ease-in-out infinite;
+    }
+
+    .todin-hero__text::after {
+        content: "";
+        position: absolute;
+        inset: auto 20% -1rem 20%;
+        height: 1rem;
+        background: radial-gradient(
+            circle,
+            rgba(236, 72, 153, 0.35),
+            rgba(52, 252, 62, 0.275)
+        );
+        filter: blur(12px);
+        opacity: 0.4;
+        animation: todin-shadow 7s ease-in-out infinite;
+        z-index: -1;
+        pointer-events: none;
+    }
+}

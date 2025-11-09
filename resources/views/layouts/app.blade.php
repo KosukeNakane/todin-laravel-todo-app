@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>@yield('title', config('app.name', 'Laravel'))</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -13,23 +13,62 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
 
-            <!-- Page Heading -->
+        <script>
+            (() => {
+                const prefersDark = window.matchMedia
+                    ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    : false;
+                document.documentElement.classList.toggle('dark', prefersDark);
+                document.documentElement.dataset.theme = prefersDark ? 'dark' : 'light';
+            })();
+        </script>
+    </head>
+    <body class="font-sans antialiased bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50">
+        <div class="min-h-screen">
+            <header class="bg-white shadow-sm dark:bg-slate-900/70 dark:shadow-black/20">
+                <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-4">
+                    <a href="{{ auth()->check() ? route('todos.index') : route('top') }}" class="text-2xl font-bold tracking-wide text-rose-500 dark:text-rose-400">
+                        Todin
+                    </a>
+                    <nav class="flex items-center gap-4 text-sm">
+                        @auth
+                            <a href="{{ route('todos.index') }}" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400 {{ request()->is('index') ? 'text-rose-500 dark:text-rose-400' : '' }}">一覧</a>
+                            <a href="{{ route('user.index') }}" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400 {{ request()->is('user') ? 'text-rose-500 dark:text-rose-400' : '' }}">ユーザー設定</a>
+                            <form method="POST" action="{{ route('logout') }}" class="inline-flex">
+                                @csrf
+                                <button type="submit" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400">ログアウト</button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400">ログイン</a>
+                            <a href="{{ route('register') }}" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400">新規登録</a>
+                        @endauth
+                    </nav>
+                </div>
+            </header>
+
             @if (isset($header))
-                <header class="bg-white dark:bg-gray-800 shadow">
+                <header class="bg-white shadow mt-4 dark:bg-slate-900/70 dark:shadow-black/20">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
             @endif
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
+            <main class="py-10 px-4">
+                <div class="max-w-7xl mx-auto space-y-6">
+                    @if (session('status'))
+                        <div class="rounded-lg border border-emerald-100 bg-emerald-50 px-4 py-3 text-emerald-700 dark:border-emerald-500/50 dark:bg-emerald-500/10 dark:text-emerald-200">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                    @hasSection('content')
+                        @yield('content')
+                    @else
+                        {{ $slot ?? '' }}
+                    @endif
+                </div>
             </main>
         </div>
     </body>
