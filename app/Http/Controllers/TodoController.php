@@ -16,30 +16,43 @@ class TodoController extends Controller
     public function index(Request $request): View
     {
         $user = $request->user();
-        $sort = $request->input('sort', 'latest');
+        $sortOptions = [
+            'due_date' => '期限日順',
+            'created_at' => '作成日順',
+            'status' => '状態順',
+            'priority' => '優先度順',
+        ];
+        $sort = $request->input('sort', 'due_date');
+        if (! array_key_exists($sort, $sortOptions)) {
+            $sort = 'due_date';
+        }
+
+        $direction = $request->input('direction', 'asc');
+        if (! in_array($direction, ['asc', 'desc'], true)) {
+            $direction = 'asc';
+        }
+
+        $secondaryDirection = $direction === 'asc' ? 'asc' : 'desc';
 
         $query = Task::ownedBy($user);
 
         match ($sort) {
-            'oldest' => $query->orderBy('created_at'),
-            'status' => $query->orderBy('is_completed')->orderByDesc('updated_at'),
-            'priority' => $query->orderByDesc('priority')->orderByDesc('created_at'),
-            default => $query->latest(),
+            'created_at' => $query->orderBy('created_at', $direction),
+            'status' => $query->orderBy('is_completed', $direction)->orderBy('updated_at', $secondaryDirection),
+            'priority' => $query->orderBy('priority', $direction)->orderBy('created_at', $secondaryDirection),
+            default => $query->orderBy('due_date', $direction)->orderBy('created_at', $secondaryDirection),
         };
 
         $tasks = $query->get();
 
-        $sortOptions = [
-            'latest' => '新しい順',
-            'oldest' => '古い順',
-            'status' => '状態順',
-            'priority' => '優先度順',
-        ];
+        $nextDirection = $direction === 'asc' ? 'desc' : 'asc';
 
         return view('index', [
             'tasks' => $tasks,
             'sort' => $sort,
             'sortOptions' => $sortOptions,
+            'direction' => $direction,
+            'nextDirection' => $nextDirection,
         ]);
     }
 

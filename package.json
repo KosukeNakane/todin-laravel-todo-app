@@ -3,7 +3,9 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "up": "./vendor/bin/sail up -d && npm run dev",
+        "down": "./vendor/bin/sail down"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",

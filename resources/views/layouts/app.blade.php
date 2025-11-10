@@ -23,6 +23,32 @@
                 document.documentElement.dataset.theme = prefersDark ? 'dark' : 'light';
             })();
         </script>
+        <script>
+            (() => {
+                const key = 'todin:scroll-position';
+                if ('scrollRestoration' in history) {
+                    history.scrollRestoration = 'manual';
+                }
+                const saved = sessionStorage.getItem(key);
+                if (saved !== null) {
+                    window.__todinScrollRestore = Number(saved);
+                }
+                window.addEventListener('beforeunload', () => {
+                    sessionStorage.setItem(key, String(window.scrollY));
+                });
+                const applyRestore = () => {
+                    if (window.__todinScrollRestore !== undefined) {
+                        window.scrollTo(0, window.__todinScrollRestore);
+                        sessionStorage.removeItem(key);
+                        delete window.__todinScrollRestore;
+                    }
+                };
+                if (window.__todinScrollRestore !== undefined) {
+                    requestAnimationFrame(applyRestore);
+                }
+                document.addEventListener('DOMContentLoaded', applyRestore, { once: true });
+            })();
+        </script>
     </head>
     <body class="font-sans antialiased bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50">
         <div class="min-h-screen">
@@ -57,12 +83,6 @@
 
             <main class="py-10 px-4">
                 <div class="max-w-7xl mx-auto space-y-6">
-                    @if (session('status'))
-                        <div class="rounded-lg border border-emerald-100 bg-emerald-50 px-4 py-3 text-emerald-700 dark:border-emerald-500/50 dark:bg-emerald-500/10 dark:text-emerald-200">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
                     @hasSection('content')
                         @yield('content')
                     @else
