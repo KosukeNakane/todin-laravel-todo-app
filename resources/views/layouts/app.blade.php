@@ -61,10 +61,9 @@
                         @auth
                             <a href="{{ route('todos.index') }}" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400 {{ request()->is('index') ? 'text-rose-500 dark:text-rose-400' : '' }}">一覧</a>
                             <a href="{{ route('user.index') }}" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400 {{ request()->is('user') ? 'text-rose-500 dark:text-rose-400' : '' }}">ユーザー設定</a>
-                            <form method="POST" action="{{ route('logout') }}" class="inline-flex">
-                                @csrf
-                                <button type="submit" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400">ログアウト</button>
-                            </form>
+                            <button type="button" x-data x-on:click.prevent="$dispatch('open-modal', 'confirm-logout')" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400">
+                                ログアウト
+                            </button>
                         @else
                             <a href="{{ route('login') }}" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400">ログイン</a>
                             <a href="{{ route('register') }}" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400">新規登録</a>
@@ -72,6 +71,27 @@
                     </nav>
                 </div>
             </header>
+
+            @auth
+                <x-modal name="confirm-logout" focusable>
+                    <form method="POST" action="{{ route('logout') }}" class="p-6 space-y-6">
+                        @csrf
+                        <div>
+                            <p class="text-sm font-semibold uppercase tracking-[0.3em] text-rose-400">Confirm</p>
+                            <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-white">ログアウトしますか？</h2>
+                            <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">セッションを終了してトップページへ戻ります。続行する場合は「ログアウト」を押してください。</p>
+                        </div>
+                        <div class="flex justify-end gap-3">
+                            <button type="button" x-on:click="$dispatch('close')" class="rounded-full border border-slate-200 px-5 py-2.5 font-semibold text-slate-600 transition hover:bg-slate-50 dark:border-slate-600 dark:text-slate-200">
+                                キャンセル
+                            </button>
+                            <button type="submit" class="rounded-full bg-rose-500 px-5 py-2.5 font-semibold text-white shadow hover:bg-rose-600">
+                                ログアウト
+                            </button>
+                        </div>
+                    </form>
+                </x-modal>
+            @endauth
 
             @if (isset($header))
                 <header class="bg-white shadow mt-4 dark:bg-slate-900/70 dark:shadow-black/20">
