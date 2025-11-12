@@ -73,7 +73,7 @@
             </header>
 
             @auth
-                <x-modal name="confirm-logout" focusable>
+                <x-shared.overlays.modal name="confirm-logout" focusable>
                     <form method="POST" action="{{ route('logout') }}" class="p-6 space-y-6">
                         @csrf
                         <div>
@@ -90,7 +90,7 @@
                             </button>
                         </div>
                     </form>
-                </x-modal>
+                </x-overlays.modal>
             @endauth
 
             @if (isset($header))

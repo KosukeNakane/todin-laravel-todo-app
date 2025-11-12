@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +11,7 @@ Route::get('/', function () {
         return redirect()->route('todos.index');
     }
 
-    return view('top');
+    return view('pages.public.top');
 })->name('top');
 
 Route::middleware('guest')->group(function () {
@@ -30,10 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/user', [UserController::class, 'index'])->name('user.index');
     Route::put('/user', [UserController::class, 'update'])->name('user.update');
 
-    // Breeze 既存のプロフィール編集ルート
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';

@@ -30,7 +30,7 @@
         <h3 class="text-lg font-semibold text-slate-900 dark:text-white">タスクを追加</h3>
         <form method="POST" action="{{ route('todos.store') }}" class="mt-6 space-y-4">
             @csrf
-            <x-todo.forms.task-fields
+            <x-features.todo.forms.task-fields
                 title-id="title"
                 description-id="description"
                 due-date-id="due_date"

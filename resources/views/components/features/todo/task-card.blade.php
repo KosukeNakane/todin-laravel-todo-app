@@ -65,7 +65,7 @@
         </div>
     </div>
 
-    <x-todo.modals.description :task="$task" show="showDescription" edit="openEdit" />
-    <x-todo.modals.edit-task :task="$task" show="openEdit" />
-    <x-todo.modals.delete-task :task="$task" show="openDelete" />
+    <x-features.todo.modals.description :task="$task" show="showDescription" edit="openEdit" />
+    <x-features.todo.modals.edit-task :task="$task" show="openEdit" />
+    <x-features.todo.modals.delete-task :task="$task" show="openDelete" />
 </article>

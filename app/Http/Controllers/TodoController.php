@@ -47,7 +47,7 @@ class TodoController extends Controller
 
         $nextDirection = $direction === 'asc' ? 'desc' : 'asc';
 
-        return view('index', [
+        return view('pages.todo.index', [
             'tasks' => $tasks,
             'sort' => $sort,
             'sortOptions' => $sortOptions,

@@ -42,7 +42,7 @@
         <form method="POST" action="{{ route('todos.update', $task) }}" class="mt-6 space-y-4">
             @csrf
             @method('PATCH')
-            <x-todo.forms.task-fields
+            <x-features.todo.forms.task-fields
                 :title-id="$titleId"
                 :description-id="$descriptionId"
                 :due-date-id="$dueDateId"
