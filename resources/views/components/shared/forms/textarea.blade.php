@@ -1,5 +1,4 @@
 @props([
-    'disabled' => false,
     'variant' => 'default',
 ])
 
@@ -10,4 +9,4 @@
     };
 @endphp
 
-<input {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => $classes]) !!}>
+<textarea {!! $attributes->merge(['class' => $classes]) !!}>{{ $slot }}</textarea>

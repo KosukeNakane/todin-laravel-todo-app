@@ -15,45 +15,51 @@
 ])
 
 @php
-    $isCompact = $variant === 'compact';
-    $labelClass = $isCompact
-        ? 'text-xs font-semibold text-slate-600 dark:text-slate-300'
-        : 'text-sm font-semibold text-slate-700 dark:text-slate-200';
-    $inputClass = $isCompact
-        ? 'mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 focus:border-rose-400 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100'
-        : 'mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 focus:border-rose-400 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100';
+    $variantKey = $variant === 'compact' ? 'compact' : 'default';
 @endphp
 
 <div class="space-y-4">
     <div>
-        <label for="{{ $titleId }}" class="{{ $labelClass }}">タイトル</label>
-        <input id="{{ $titleId }}" name="title" type="text" value="{{ $titleValue }}" required placeholder="{{ $titlePlaceholder }}" class="{{ $inputClass }}">
+        <x-shared.forms.input-label :for="$titleId" :variant="$variantKey">
+            タイトル
+        </x-shared.forms.input-label>
+        <x-shared.forms.text-input id="{{ $titleId }}" name="title" type="text" :value="$titleValue" :placeholder="$titlePlaceholder" :variant="$variantKey" required />
     </div>
 
     <div>
-        <label for="{{ $descriptionId }}" class="{{ $labelClass }}">内容</label>
-        <textarea id="{{ $descriptionId }}" name="description" rows="3" placeholder="{{ $descriptionPlaceholder }}" class="{{ $inputClass }}">{{ $descriptionValue }}</textarea>
+        <x-shared.forms.input-label :for="$descriptionId" :variant="$variantKey">
+            内容
+        </x-shared.forms.input-label>
+        <x-shared.forms.textarea id="{{ $descriptionId }}" name="description" rows="3" :variant="$variantKey" placeholder="{{ $descriptionPlaceholder }}">{{ $descriptionValue }}</x-shared.forms.textarea>
     </div>
 
     @if ($groupLayout === 'grid')
         <div class="grid gap-4 sm:grid-cols-2">
             <div>
-                <label for="{{ $dueDateId }}" class="{{ $labelClass }}">期限</label>
-                <input id="{{ $dueDateId }}" name="due_date" type="date" value="{{ $dueDateValue }}" class="{{ $inputClass }}">
+                <x-shared.forms.input-label :for="$dueDateId" :variant="$variantKey">
+                    期限
+                </x-shared.forms.input-label>
+                <x-shared.forms.text-input id="{{ $dueDateId }}" name="due_date" type="date" :value="$dueDateValue" :variant="$variantKey" />
             </div>
             <div>
-                <label for="{{ $priorityId }}" class="{{ $labelClass }}">{{ $priorityLabel }}</label>
-                <input id="{{ $priorityId }}" name="priority" type="number" min="0" max="5" value="{{ $priorityValue }}" class="{{ $inputClass }}">
+                <x-shared.forms.input-label :for="$priorityId" :variant="$variantKey">
+                    {{ $priorityLabel }}
+                </x-shared.forms.input-label>
+                <x-shared.forms.text-input id="{{ $priorityId }}" name="priority" type="number" min="0" max="5" :value="$priorityValue" :variant="$variantKey" />
             </div>
         </div>
     @else
         <div>
-            <label for="{{ $dueDateId }}" class="{{ $labelClass }}">期限</label>
-            <input id="{{ $dueDateId }}" name="due_date" type="date" value="{{ $dueDateValue }}" class="{{ $inputClass }}">
+            <x-shared.forms.input-label :for="$dueDateId" :variant="$variantKey">
+                期限
+            </x-shared.forms.input-label>
+            <x-shared.forms.text-input id="{{ $dueDateId }}" name="due_date" type="date" :value="$dueDateValue" :variant="$variantKey" />
         </div>
         <div>
-            <label for="{{ $priorityId }}" class="{{ $labelClass }}">{{ $priorityLabel }}</label>
-            <input id="{{ $priorityId }}" name="priority" type="number" min="0" max="5" value="{{ $priorityValue }}" class="{{ $inputClass }}">
+            <x-shared.forms.input-label :for="$priorityId" :variant="$variantKey">
+                {{ $priorityLabel }}
+            </x-shared.forms.input-label>
+            <x-shared.forms.text-input id="{{ $priorityId }}" name="priority" type="number" min="0" max="5" :value="$priorityValue" :variant="$variantKey" />
         </div>
     @endif
 </div>

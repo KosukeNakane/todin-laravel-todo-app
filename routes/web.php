@@ -11,7 +11,7 @@ Route::get('/', function () {
         return redirect()->route('todos.index');
     }
 
-    return view('pages.public.top');
+    return view('pages.top.top');
 })->name('top');
 
 Route::middleware('guest')->group(function () {

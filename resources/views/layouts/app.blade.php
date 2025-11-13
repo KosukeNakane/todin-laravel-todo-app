@@ -61,9 +61,9 @@
                         @auth
                             <a href="{{ route('todos.index') }}" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400 {{ request()->is('index') ? 'text-rose-500 dark:text-rose-400' : '' }}">一覧</a>
                             <a href="{{ route('user.index') }}" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400 {{ request()->is('user') ? 'text-rose-500 dark:text-rose-400' : '' }}">ユーザー設定</a>
-                            <button type="button" x-data x-on:click.prevent="$dispatch('open-modal', 'confirm-logout')" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400">
+                            <x-shared.buttons.button type="button" variant="ghost" size="md" class="font-semibold" x-data x-on:click.prevent="$dispatch('open-modal', 'confirm-logout')">
                                 ログアウト
-                            </button>
+                            </x-shared.buttons.button>
                         @else
                             <a href="{{ route('login') }}" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400">ログイン</a>
                             <a href="{{ route('register') }}" class="font-semibold text-slate-600 hover:text-rose-500 dark:text-slate-200 dark:hover:text-rose-400">新規登録</a>
@@ -82,15 +82,15 @@
                             <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">セッションを終了してトップページへ戻ります。続行する場合は「ログアウト」を押してください。</p>
                         </div>
                         <div class="flex justify-end gap-3">
-                            <button type="button" x-on:click="$dispatch('close')" class="rounded-full border border-slate-200 px-5 py-2.5 font-semibold text-slate-600 transition hover:bg-slate-50 dark:border-slate-600 dark:text-slate-200">
+                            <x-shared.buttons.button type="button" variant="outline" size="md" x-on:click="$dispatch('close')">
                                 キャンセル
-                            </button>
-                            <button type="submit" class="rounded-full bg-rose-500 px-5 py-2.5 font-semibold text-white shadow hover:bg-rose-600">
+                            </x-shared.buttons.button>
+                            <x-shared.buttons.button type="submit" variant="primary" size="md" shadow="true">
                                 ログアウト
-                            </button>
+                            </x-shared.buttons.button>
                         </div>
                     </form>
-                </x-overlays.modal>
+                </x-shared.overlays.modal>
             @endauth
 
             @if (isset($header))

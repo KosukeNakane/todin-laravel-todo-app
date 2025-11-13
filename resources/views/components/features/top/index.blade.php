@@ -1,8 +1,3 @@
-@extends('layouts.app')
-
-@section('title', 'ようこそ | Todin')
-
-@section('content')
     <section class="relative min-h-[70vh] overflow-hidden rounded-3xl bg-dots-darker bg-center bg-gray-100 p-10 text-center dark:bg-dots-lighter dark:bg-gray-900">
         <div class="mx-auto flex max-w-3xl flex-col items-center justify-center gap-6 py-12">
             <p class="text-sm font-semibold uppercase tracking-[0.5em] text-rose-400">日常を整える</p>
@@ -24,4 +19,3 @@
             </div>
         </div>
     </section>
-@endsection
