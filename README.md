@@ -1,66 +1,123 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Todin - Laravel ToDo App
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+チーム/個人でのタスク管理を想定した Laravel 10 製アプリです。ToDo の作成から並び替え、ユーザー情報・パスワード管理まで、仕様要件で求められている機能を 1 つの画面群に集約しています。
 
-## About Laravel
+## 機能ハイライト
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   モーダルベースのタスク作成/編集/削除フローと、完了済みタスクのグレーアウト表示。
+-   期日・優先度の並び替え、完了トグル、詳細閲覧などを 1 画面で操作。
+-   ユーザー設定画面でのプロフィール更新とパスワード変更（英数字を含む 8 文字以上）。
+-   ログアウト時の確認モーダルなど、共通 UI/UX を Tailwind CSS + Alpine.js で構築。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 仕様要件との対応
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### ToDo リスト管理
 
-## Learning Laravel
+| No  | 仕様                | 説明                                                                 | 主な実装                                                                                                                             |
+| --- | ------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | ToDo 追加機能       | モーダルからタイトル/期日/優先度/説明を登録。                        | `resources/views/components/features/todo/modals/create-task.blade.php`, `app/Http/Controllers/TodoController@store`                 |
+| 2   | ToDo 一覧機能       | `/index` でカード表示、概要/期日/優先度を確認。                      | `resources/views/pages/todo/index.blade.php`, `resources/views/components/features/todo/task-card.blade.php`, `TodoController@index` |
+| 3   | ToDo 編集機能       | 各カードから編集モーダルを開き、項目を更新。                         | `resources/views/components/features/todo/modals/edit-task.blade.php`, `TodoController@update`                                       |
+| 4   | ToDo 削除機能       | 削除モーダルで確認後に削除 API を実行。                              | `resources/views/components/features/todo/modals/delete-task.blade.php`, `TodoController@destroy`                                    |
+| 5   | 完了/未完了チェック | 完了トグルボタンで状態を変更し、完了済みカードを自動でグレーアウト。 | `resources/views/components/features/todo/task-card.blade.php`, `TodoController@complete`                                            |
+| 6   | 並び替え機能        | 期日・優先度・生成順を昇降順切替でソート可能。                       | `resources/views/pages/todo/index.blade.php` ,`TodoController@index`                                                                 |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### ユーザー管理機能
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+| No  | 仕様             | 説明                                                                                        | 主な実装                                                                                                                                            |
+| --- | ---------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | ユーザー登録     | Breeze ベースの登録画面。パスワードは英数字を含む 8 文字以上でハッシュ化保存。              | `resources/views/pages/auth/register/index.blade.php`, `RegisteredUserController@store`, `App\Providers\AppServiceProvider`（`Password::defaults`） |
+| 2   | ログイン         | `/login` からメール（ユーザー名相当）とパスワードで認証。失敗時はバリデーションエラー表示。 | `resources/views/pages/auth/login/index.blade.php`, `AuthenticatedSessionController@store`                                                          |
+| 3   | ユーザー情報編集 | `/user` で名前・メールの更新と、パスワード変更モーダル。                                    | `resources/views/pages/user/user.blade.php`, `UserController@update`, `PasswordController@update`                                                   |
+| 4   | ログアウト       | ヘッダーの「ログアウト」から確認モーダル経由でセッション終了。                              | `resources/views/layouts/app.blade.php`, `<x-shared.overlays.modal name="confirm-logout">`                                                          |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 画面一覧
 
-## Laravel Sponsors
+| 画面              | Blade ファイル                                               | 説明                                                       |
+| ----------------- | ------------------------------------------------------------ | ---------------------------------------------------------- |
+| `top`             | `resources/views/pages/top/index.blade.php`                  | ログアウト時のランディング/紹介ページ。                    |
+| `register`        | `resources/views/pages/auth/register/index.blade.php`        | 氏名・メール・パスワードを入力して新規アカウントを作成。   |
+| `login`           | `resources/views/pages/auth/login/index.blade.php`           | メールアドレス + パスワードのログインフォーム。            |
+| `forgot-password` | `resources/views/pages/auth/forgot-password/index.blade.php` | メールアドレスを送信し、パスワードリセット用リンクを取得。 |
+| `reset-password`  | `resources/views/pages/auth/reset-password/index.blade.php`  | リセットリンク経由でアクセスし、新しいパスワードを設定。   |
+| `index`           | `resources/views/pages/todo/index.blade.php`                 | ToDo 一覧、ソート UI、新規作成モーダルのトリガー。         |
+| `user`            | `resources/views/pages/user/index.blade.php`                 | プロフィール表示/更新と、パスワード変更フォーム。          |
+| 共通レイアウト    | `resources/views/layouts/app.blade.php`                      | ヘッダー、ログアウト確認モーダル、テーマ設定など。         |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 開発環境
 
-### Premium Partners
+-   PHP 8.2+
+-   Composer 2.x
+-   Node.js 18+ / npm 9+
+-   DB: MySQL (Laravel Sail のデフォルト)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## セットアップ手順
 
-## Contributing
+### 1. リポジトリ取得
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+git clone <このリポジトリのURL>
+cd laravel-todo-app
+```
 
-## Code of Conduct
+### 2. 依存関係インストール
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+composer install
+npm install
+```
 
-## Security Vulnerabilities
+### 3. `.env` 作成と環境設定
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+-   Laravel Sail を `./vendor/bin/sail up` で初回起動すると `.env` が自動生成されます。すでに存在する場合は本手順をスキップしてください。
+-   手動で環境構築する場合のみ以下を実行します。
+    -   macOS/Linux:
+        ```bash
+        cp .env.example .env
+        ```
+    -   Windows (PowerShell):
+        ```powershell
+        Copy-Item .env.example .env
+        ```
 
-## License
+#### DB 設定について
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+-   **MySQL（Sail デフォルト）**: `.env` の `DB_CONNECTION=mysql` などは Sail が自動で書き換えるため、そのまま利用できます。
+
+#### 開発中のメール送信（Mailpit）
+
+-   Sail には Mailpit コンテナを追加済みです。`.env` が以下の値になっているか確認し、異なる場合は書き換えてください。
+
+    ```env
+    MAIL_MAILER=smtp
+    MAIL_HOST=mailpit
+    MAIL_PORT=1025
+    MAIL_USERNAME=null
+    MAIL_PASSWORD=null
+    MAIL_ENCRYPTION=null
+    MAIL_FROM_ADDRESS="hello@example.com" #任意のアドレス
+    MAIL_FROM_NAME="${APP_NAME}"
+    ```
+
+-   `npm run up`（=`sail up`）実行中は [http://localhost:8025](http://localhost:8025) で送信済みメールを確認できます。パスワードリセットなどの通知はすべて Mailpit に保存されます。
+
+### 4. アプリケーションキーの生成
+
+```bash
+php artisan key:generate
+```
+
+### 5. マイグレーション
+
+```bash
+php artisan migrate
+```
+
+### 6. アプリの起動 / 停止
+
+```bash
+npm run up      # 起動 (エイリアス指定 ./vendor/bin/sail up -d && npm run dev を実行)
+npm run down    # 停止 (エイリアス指定 ./vendor/bin/sail down を実行)
+```
+
+ブラウザで `http://localhost` にアクセスするとアプリを確認できます。Mailpit のダッシュボードは `http://localhost:8025` です。
