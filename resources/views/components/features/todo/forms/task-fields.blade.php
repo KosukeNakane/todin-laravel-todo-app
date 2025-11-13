@@ -39,7 +39,17 @@
                 <x-shared.forms.input-label :for="$dueDateId" :variant="$variantKey">
                     期限
                 </x-shared.forms.input-label>
-                <x-shared.forms.text-input id="{{ $dueDateId }}" name="due_date" type="date" :value="$dueDateValue" :variant="$variantKey" />
+                <x-shared.forms.text-input
+                    id="{{ $dueDateId }}"
+                    name="due_date"
+                    type="text"
+                    data-date-picker
+                    autocomplete="off"
+                    inputmode="numeric"
+                    placeholder="YYYY-MM-DD"
+                    :value="$dueDateValue"
+                    :variant="$variantKey"
+                />
             </div>
             <div>
                 <x-shared.forms.input-label :for="$priorityId" :variant="$variantKey">
@@ -53,7 +63,17 @@
             <x-shared.forms.input-label :for="$dueDateId" :variant="$variantKey">
                 期限
             </x-shared.forms.input-label>
-            <x-shared.forms.text-input id="{{ $dueDateId }}" name="due_date" type="date" :value="$dueDateValue" :variant="$variantKey" />
+            <x-shared.forms.text-input
+                id="{{ $dueDateId }}"
+                name="due_date"
+                type="text"
+                data-date-picker
+                autocomplete="off"
+                inputmode="numeric"
+                placeholder="YYYY-MM-DD"
+                :value="$dueDateValue"
+                :variant="$variantKey"
+            />
         </div>
         <div>
             <x-shared.forms.input-label :for="$priorityId" :variant="$variantKey">

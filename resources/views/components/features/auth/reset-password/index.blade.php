@@ -1,5 +1,5 @@
     @php
-        $email = old('email', $request->email);
+        $email = old('email', request()->input('email'));
     @endphp
 
     <section class="mx-auto max-w-3xl rounded-2xl bg-white p-8 shadow-sm dark:bg-slate-800 dark:shadow-black/20">
@@ -16,7 +16,7 @@
         <form method="POST" action="{{ route('password.store') }}" class="mt-8 space-y-6">
             @csrf
 
-            <input type="hidden" name="token" value="{{ $request->route('token') }}">
+            <input type="hidden" name="token" value="{{ request()->route('token') }}">
 
             <div>
                 <x-shared.forms.input-label for="email">
