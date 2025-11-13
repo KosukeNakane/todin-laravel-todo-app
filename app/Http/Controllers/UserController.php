@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index(Request $request): View
     {
-        return view('pages.user.user', [
+        return view('pages.user.index', [
             'user' => $request->user(),
         ]);
     }

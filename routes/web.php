@@ -1,24 +1,20 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+//ログイン時はTODO一覧画面へ、未ログイン時はトップ画面へリダイレクト
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('todos.index');
     }
 
-    return view('pages.top.top');
+    return view('pages.top.index');
 })->name('top');
 
-Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-        ->name('login');
-});
-
+//ログイン時にアクセス可能なルート
 Route::middleware('auth')->group(function () {
     Route::get('/index', [TodoController::class, 'index'])->name('todos.index');
     Route::post('/todos', [TodoController::class, 'store'])->name('todos.store');

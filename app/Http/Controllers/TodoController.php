@@ -11,7 +11,7 @@ use Illuminate\View\View;
 class TodoController extends Controller
 {
     /**
-     * 一覧画面を表示。
+     * 一覧画面を表示　並び替え対応。
      */
     public function index(Request $request): View
     {
