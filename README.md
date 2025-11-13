@@ -57,7 +57,7 @@
 
 ```bash
 git clone <このリポジトリのURL>
-cd laravel-todo-app
+cd todin-laravel-todo-app
 ```
 
 ### 2. 依存関係インストール
@@ -69,8 +69,7 @@ npm install
 
 ### 3. `.env` 作成と環境設定
 
--   Laravel Sail を `./vendor/bin/sail up` で初回起動すると `.env` が自動生成されます。すでに存在する場合は本手順をスキップしてください。
--   手動で環境構築する場合のみ以下を実行します。
+-   以下のコマンドで.env を作成します。
     -   macOS/Linux:
         ```bash
         cp .env.example .env
@@ -80,27 +79,6 @@ npm install
         Copy-Item .env.example .env
         ```
 
-#### DB 設定について
-
--   **MySQL（Sail デフォルト）**: `.env` の `DB_CONNECTION=mysql` などは Sail が自動で書き換えるため、そのまま利用できます。
-
-#### 開発中のメール送信（Mailpit）
-
--   Sail には Mailpit コンテナを追加済みです。`.env` が以下の値になっているか確認し、異なる場合は書き換えてください。
-
-    ```env
-    MAIL_MAILER=smtp
-    MAIL_HOST=mailpit
-    MAIL_PORT=1025
-    MAIL_USERNAME=null
-    MAIL_PASSWORD=null
-    MAIL_ENCRYPTION=null
-    MAIL_FROM_ADDRESS="hello@example.com" #任意のアドレス
-    MAIL_FROM_NAME="${APP_NAME}"
-    ```
-
--   `npm run up`（=`sail up`）実行中は [http://localhost:8025](http://localhost:8025) で送信済みメールを確認できます。パスワードリセットなどの通知はすべて Mailpit に保存されます。
-
 ### 4. アプリケーションキーの生成
 
 ```bash
@@ -108,6 +86,8 @@ php artisan key:generate
 ```
 
 ### 5. マイグレーション
+
+以下のコマンドを実行し、`.env`の`APP_KEY=`に値が記入されていることを確認してください。
 
 ```bash
 php artisan migrate
@@ -120,4 +100,30 @@ npm run up      # 起動 (エイリアス指定 ./vendor/bin/sail up -d && npm r
 npm run down    # 停止 (エイリアス指定 ./vendor/bin/sail down を実行)
 ```
 
-ブラウザで `http://localhost` にアクセスするとアプリを確認できます。Mailpit のダッシュボードは `http://localhost:8025` です。
+ブラウザで以下のアドレスにアクセスすると、それぞれのサービスを確認できます：
+
+-   アプリ本体：http://localhost
+-   Mailpit ダッシュボード（メール確認用）：http://localhost:8025
+-   phpMyAdmin（データベース管理用）：http://localhost:8080
+
+## トラブルシュート
+
+### `SQLSTATE[HY000] [2002] Connection refused` エラーが出る場合
+
+`php artisan migrate` 実行時に **2002 エラー（データベースに接続できません）** が発生する場合は、Laravel Sail のコンテナが正常に動作していない可能性があります。
+
+以下の手順で Sail を再インストールすると改善することがあります：
+
+```bash
+./vendor/bin/sail down --rmi all -v
+composer install
+php artisan sail:install
+#  Which services would you like to install? は mysql を選択し enter
+./vendor/bin/sail up -d
+```
+
+その後、再度マイグレーションを実行してください：
+
+```bash
+./vendor/bin/sail artisan migrate
+```
